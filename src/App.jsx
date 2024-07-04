@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchWeather } from "./api/fetchWeather";
+import './App.css';
 
 const App = () => {
   const [weatherData, setWeatherData] = useState(null);
@@ -55,42 +56,46 @@ const App = () => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Enter city name..."
-        value={cityName}
-        onChange={(e) => setCityName(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <button onClick={toggleTemperatureUnit}>
-        Switch to °{temperatureUnit === "C" ? "F" : "C"}
-      </button>
+    <div className="container">
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Enter city name..."
+          value={cityName}
+          onChange={(e) => setCityName(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <button className="unit-toggle" onClick={toggleTemperatureUnit}>
+          °{temperatureUnit === "C" ? "F" : "C"}
+        </button>
+      </div>
       
-      {isLoading && <div>Loading...</div>}
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {isLoading && <div className="loading">Loading...</div>}
+      {error && <div className="error">{error}</div>}
       
       {weatherData && (
-        <div>
+        <div className="weather-info">
           <h2>
             {weatherData.location.name}, {weatherData.location.region},{" "}
             {weatherData.location.country}
           </h2>
-          <p>
-            Temperature: {temperatureUnit === "C" ? weatherData.current.temp_c : weatherData.current.temp_f} °{temperatureUnit}
-          </p>
-          <p>Condition: {weatherData.current.condition.text}</p>
           <img
             src={weatherData.current.condition.icon}
             alt={weatherData.current.condition.text}
           />
-          <p>Humidity: {weatherData.current.humidity} %</p>
-          <p>Pressure: {weatherData.current.pressure_mb} mb</p>
-          <p>Visibility: {weatherData.current.vis_km} km</p>
+          <div className="weather-details">
+            <p>
+              Temperature: {temperatureUnit === "C" ? weatherData.current.temp_c : weatherData.current.temp_f} °{temperatureUnit}
+            </p>
+            <p>Condition: {weatherData.current.condition.text}</p>
+            <p>Humidity: {weatherData.current.humidity}%</p>
+            <p>Pressure: {weatherData.current.pressure_mb} mb</p>
+            <p>Visibility: {weatherData.current.vis_km} km</p>
+          </div>
         </div>
       )}
       
-      <div>
+      <div className="recent-searches">
         <h3>Recent Searches</h3>
         <ul>
           {recentSearches.map((city, index) => (
